@@ -1,5 +1,6 @@
 import numpy as np
 import cv2 as cv
+import imutils
 
 MIN_MATCH_COUNT = 10
 
@@ -40,11 +41,32 @@ MIN_MATCH_COUNT = 10
     # img3 = cv.drawMatches(img1, kp1, img2, kp2, good, None, **draw_params)
     # cv.imshow('window', img3)
     #plt.imshow(img3, 'gray'), plt.show()
+def contour_to_rect(image):
+    img = cv.resize(image, (620, 480))
+    gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+    img_x, img_y, chnls = img.shape
+    #blurred = cv.GaussianBlur(gray, (11, 11), 0)
+    blurred = cv.bilateralFilter(gray, 11, 29, 29)
+
+    img_threshed =  cv.adaptiveThreshold(blurred,255,cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY,11,2)
+    edged = cv.Canny(img_threshed, 30, 200)
+
+    contours, hierarchy = cv.findContours(edged, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+    for contour in contours:
+        (x, y, w, h) = cv.boundingRect(contour)
+        print('#########  ', w/h )
+        if w >= img_x/3:
+            print('$$$$$$$$$$$')
+            cv.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+    cv.imshow('contours', edged)
+    cv.imshow('rect', img)
+    cv.waitKey()
 
 def thres(image):
     image = cv.resize(image, (600, 600))
     imgToTresh = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
-    ret, img_threshed = cv.threshold(imgToTresh, 110, 255, cv.THRESH_BINARY_INV)
+    blurred = cv.GaussianBlur(imgToTresh, (9, 9), 0)
+    ret, img_threshed = cv.threshold(blurred, 110, 255, cv.THRESH_BINARY_INV)
     kernel_cl = np.ones((3, 3), np.uint8)
     closing = cv.morphologyEx(img_threshed, cv.MORPH_CLOSE, kernel_cl)
     kernel_op = np.ones((2, 2), np.uint8)
@@ -52,18 +74,36 @@ def thres(image):
     kernel_er = np.ones((2, 2), np.uint8)
     erosion = cv.erode(opening, kernel_er, iterations=1)
 
-    cv.imshow('window', erosion)
-    while True:
-        key_code = cv.waitKey(10)
-        if key_code == 27:
-            break
-    cv.destroyAllWindows()
+    processed = img_threshed
+
+    cnts = cv.findContours(processed, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+    cnts = cnts[0] if len(cnts) == 2 else cnts[1]
+    for c in cnts:
+        peri = cv.arcLength(c, True)
+        approx = cv.approxPolyDP(c, 0.015 * peri, True)
+        if len(approx) == 4:
+            x, y, w, h = cv.boundingRect(approx)
+            cv.rectangle(image, (x, y), (x + w, y + h), (36, 255, 12), 2)
+
+    cv.imshow('thresh', processed)
+    cv.imshow('image', image)
+    cv.waitKey()
+
+
+
+    # cv.imshow('window', erosion)
+    # while True:
+    #     key_code = cv.waitKey(10)
+    #     if key_code == 27:
+    #         break
+    # cv.destroyAllWindows()
 
 
 def perform_processing(image: np.ndarray) -> str:
     print(f'image.shape: {image.shape}')
     # TODO: add image processing here
-    thres(image)
+    #thres(image)
+    contour_to_rect(image)
 
 
 

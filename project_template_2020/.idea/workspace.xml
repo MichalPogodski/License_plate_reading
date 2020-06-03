@@ -2,68 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="095db28c-39d9-431b-990d-c5c0e8b7bd37" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/1b.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/2b.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/lena.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/no_idea.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/no_idea_grayscale.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/object.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/project_2020/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/s01e01/AdditiveColor.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/s01e01/Wildlife.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/s01e01/Wildlife.wmv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/s01e02/LOGO_PUT_VISION_LAB_MAIN.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/s01e02/qr.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/s01e03/lena_noise.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/s01e03/lena_salt_and_pepper.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/s01e03/road.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/s01e04/not_bad.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/s01e05/haarcascade_eye.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/s01e05/haarcascade_frontalface_default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/s01e06/decision_tree_for_and_gate.pdn" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/s01e06/decision_tree_for_and_gate.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/s01e08/cars.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/s01e08/tomatoes_and_apples.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/s01e08/tumor.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/s01eTestPreparation/obiekty.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/s01eTestPreparation/znak1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/s01eTestPreparation/znak2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/sw_s01e05/coins.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/sw_s01e05/drone_ship.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/sw_s01e05/fruit.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/sw_s01e05/shapes.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/sw_s01e06/haystack.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/sw_s01e06/needle.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/sw_s01e06/not_bad.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/sw_s01e09/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/sw_s01e11/Rocks1/disp1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/sw_s01e11/Rocks1/disp5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/sw_s01e11/Rocks1/dmin.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/sw_s01e11/Rocks1/view1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/sw_s01e11/Rocks1/view5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/zad_dopasowanie_obiekty_do_znalezienia.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/zad_dopasowanie_obiekty_wzorcowe.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/zad_twarze_1.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../_data/zad_twarze_2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../image_processing_course/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../image_processing_course/s01e01.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../image_processing_course/s01e02.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../image_processing_course/s01e03.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../image_processing_course/s01e04.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../image_processing_course/s01e05.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../image_processing_course/s01e06.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../image_processing_course/s01e08.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../image_processing_course/s01eTestPreparation.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../image_processing_course/sw_s01e05.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../image_processing_course/sw_s01e06.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../image_processing_course/sw_s01e09.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../image_processing_course/sw_s01e10.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../image_processing_course/sw_s01e11.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/processing/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/processing/utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../setup.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../zpo/s01e03.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../test/tab_022.jpg" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,6 +21,8 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/Nazwisko_Imie.py" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
@@ -149,25 +92,25 @@
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
     <state x="2629" y="310" width="424" height="484" key="FileChooserDialogImpl/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1591020103845" />
-    <state width="1830" height="278" key="GridCell.Tab.0.bottom" timestamp="1591194665685">
+    <state width="1830" height="278" key="GridCell.Tab.0.bottom" timestamp="1591215159940">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
-    <state width="1830" height="278" key="GridCell.Tab.0.bottom/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1591194665685" />
-    <state width="1830" height="278" key="GridCell.Tab.0.center" timestamp="1591194665685">
+    <state width="1830" height="278" key="GridCell.Tab.0.bottom/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1591215159940" />
+    <state width="1830" height="278" key="GridCell.Tab.0.center" timestamp="1591215159940">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
-    <state width="1830" height="278" key="GridCell.Tab.0.center/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1591194665685" />
-    <state width="1830" height="278" key="GridCell.Tab.0.left" timestamp="1591194665684">
+    <state width="1830" height="278" key="GridCell.Tab.0.center/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1591215159940" />
+    <state width="1830" height="278" key="GridCell.Tab.0.left" timestamp="1591215159940">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
-    <state width="1830" height="278" key="GridCell.Tab.0.left/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1591194665684" />
-    <state width="1830" height="278" key="GridCell.Tab.0.right" timestamp="1591194665685">
+    <state width="1830" height="278" key="GridCell.Tab.0.left/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1591215159940" />
+    <state width="1830" height="278" key="GridCell.Tab.0.right" timestamp="1591215159940">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
-    <state width="1830" height="278" key="GridCell.Tab.0.right/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1591194665685" />
-    <state x="2655" y="221" key="SettingsEditor" timestamp="1591184109457">
+    <state width="1830" height="278" key="GridCell.Tab.0.right/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1591215159940" />
+    <state x="2655" y="221" key="SettingsEditor" timestamp="1591212391481">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
-    <state x="2655" y="221" key="SettingsEditor/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1591184109457" />
+    <state x="2655" y="221" key="SettingsEditor/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1591212391481" />
   </component>
 </project>
