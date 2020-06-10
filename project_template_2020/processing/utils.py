@@ -5,7 +5,7 @@ import imutils
 def contour_to_rect(image):
 
     img = cv.resize(image, (620, 480))
-
+    to_ret = img.copy()
     #start with preproc. for signidicant contours recognition (!!!red cooper!!!)
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     blurred = cv.bilateralFilter(gray, 11, 29, 29)
@@ -23,46 +23,37 @@ def contour_to_rect(image):
         if len(approx) == 4:
             screenCnt = approx
             break
-    cv.drawContours(img, [screenCnt], 0, (0, 255, 0), 3)
+    cv.drawContours(img, [screenCnt], 0, (0, 255, 0), 1)
+    # cv.imshow('test', img)
+    p0, p2, p3, p1 = screenCnt[0][0], screenCnt[1][0], screenCnt[2][0], screenCnt[3][0]
 
-    # mask, in case to find out, what are the real contours of detected license plate (!!!red cooper!!!)
-    mask = np.zeros(gray.shape, np.uint8)
-    new_image = cv.drawContours(mask, [screenCnt], 0, 255, -1, )
-    new_image = cv.bitwise_and(img, img, mask=mask)
-    cv.imshow("mask", new_image)
-
-    (x, y) = np.where(mask == 255)
-    (topx, topy) = (np.min(x), np.min(y))
-    (bottomx, bottomy) = (np.max(x), np.max(y))
-
-    #get properly perspective (!!!red cooper!!! + !!!stackOF with grocery store!!!!)
-    rect = np.array([[topy, topx], [bottomy, topx], [topy, bottomx], [bottomy, bottomx]], np.float32)
-    dst = np.array([[0, 0], [597, 0], [0, 145], [597, 145]], np.float32)
+    rect = np.array([p0, p1, p2, p3], np.float32)
+    dst = np.array([[0, 0], [600, 0], [0, 150], [600, 150]], np.float32)
     M = cv.getPerspectiveTransform(rect, dst)
     warped = cv.warpPerspective(img, M, (600, 150))
-    cv.imshow("output", warped)
-
-    #tuning of new perspective (own idea)
-
-
-
-
-
-    cv.waitKey()
+    warped_clean = cv.warpPerspective(to_ret, M, (600, 150))
+    # cv.imshow("output", warped)
+    # cv.imshow('test',  warped_clean)
+    return warped_clean
 
 
 
 
+def thresh_chars(img):
+    #preproc of image, for characters recognition
+    gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+    img = cv.bilateralFilter(gray, 101, 29, 29)
+    ret, t1 = cv.threshold(img, 200, 255, cv.THRESH_BINARY)
 
+    cv.imshow('1', t1)
 
 
 
 def perform_processing(image: np.ndarray) -> str:
     print(f'image.shape: {image.shape}')
     # TODO: add image processing here
-    #thres(image)
-    contour_to_rect(image)
-
-
+    plate = contour_to_rect(image)
+    thresh_chars(plate)
+    cv.waitKey()
 
     return 'PO12345'
