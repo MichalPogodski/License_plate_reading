@@ -17,7 +17,7 @@ def contour_to_rect(image):
     cnts = sorted(cnts, key=cv.contourArea, reverse=True)[:10]
     screenCnt = None
 
-    #looking for conoutrs of license plate (!!!red cooper!!!)
+    #looking for conoutrs of license plate (!!!red cooper!!!) DIFFERENT SOLUTION FOR BBX DETECT!!!!!!!!!
     for c in cnts:
         peri = cv.arcLength(c, True)
         approx = cv.approxPolyDP(c, 0.018 * peri, True)
@@ -36,8 +36,7 @@ def contour_to_rect(image):
     M = cv.getPerspectiveTransform(rect, dst)
     warped = cv.warpPerspective(img, M, (600, 150))
     warped_clean = cv.warpPerspective(to_ret, M, (600, 150))
-    # cv.imshow("output", warped)
-    # cv.imshow('test',  warped_clean)
+
     return warped_clean
 
 
@@ -54,6 +53,7 @@ def segment(img, clr):
     edged = cv.Canny(img, 30, 200)
     contours, hierarchy = cv.findContours(edged, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
     characters = {}
+    segmented = {}
     i, j = 0, 0
     for cnt in contours:
         x, y, w, h = cv.boundingRect(cnt)
@@ -61,14 +61,17 @@ def segment(img, clr):
             # cv.rectangle(clr, (x, y), (x + w, y + h), (0, 255, 0), 2)
             cp =img.copy()
             ch = cp[y:y+h, x:x+w]
-            characters[i] = ch
+            characters[x] = ch
             i += 1
             j = 1
         else:
             j = 0
-    for key in characters:
-        cv.imshow(str(key), characters[key])
+        sort = sorted(characters)
 
+    for idx, key in enumerate(sort):
+        segmented[idx] = characters[key]
+        cv.imshow(str(idx), segmented[idx])
+    return segmented
 
 
 
@@ -77,9 +80,12 @@ def segment(img, clr):
 def perform_processing(image: np.ndarray) -> str:
     print(f'image.shape: {image.shape}')
     # TODO: add image processing here
+    #contour_to_rect(image)
     plate = contour_to_rect(image)
+    cv.imshow('test', plate)
     threshed = thresh_chars(plate)
-    segment(threshed, plate)
+    segmented = segment(threshed, plate)
+
 
 
 
