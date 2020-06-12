@@ -8,9 +8,8 @@ def contour_to_rect(image):
     to_ret = img.copy()
     #start with preproc. for signidicant contours recognition (!!!red cooper!!!)
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-    blurred = cv.bilateralFilter(gray, 11, 29, 29)
-    img_threshed = cv.adaptiveThreshold(blurred,255,cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY,11,2)
-    edged = cv.Canny(img_threshed, 30, 200)
+    blurred = cv.bilateralFilter(gray, 11, 27, 27)
+    edged = cv.Canny(blurred, 30, 200)
     contours, hierarchy = cv.findContours(edged, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
     cv.drawContours(img, contours, -1, (0, 255, 0), 3)
     cnts = imutils.grab_contours([contours, hierarchy])
@@ -26,6 +25,22 @@ def contour_to_rect(image):
             break
     cv.drawContours(img, [screenCnt], 0, (0, 255, 0), 1)
     p0, p2, p3, p1 = screenCnt[0][0], screenCnt[1][0], screenCnt[2][0], screenCnt[3][0]
+    corn = []
+    dict = {}
+    dict[sum(p0)] = p0
+    dict[sum(p1)] = p1
+    dict[sum(p2)] = p2
+    dict[sum(p3)] = p3
+    srt_crn = sorted(dict)
+
+    for idx in range(4):
+        corn.append(dict[srt_crn[idx]])
+
+
+    p0 = corn[0]
+    p1 = corn[2]
+    p2 = corn[1]
+    p3 = corn[3]
     p0 = [p0[0] - 5, p0[1] - 5]
     p1 = [p1[0] + 5, p1[1] - 5]
     p2 = [p2[0] - 5, p2[1] + 5]
@@ -43,34 +58,45 @@ def contour_to_rect(image):
 
 def thresh_chars(img):
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-    img = cv.bilateralFilter(gray, 101, 29, 29)
-    ret, t1 = cv.threshold(img, 200, 255, cv.THRESH_BINARY)
+    blurred = cv.bilateralFilter(gray, 101, 37, 37)
+    #img_threshed = cv.adaptiveThreshold(blurred, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 11, 2)
+    ret, img_threshed = cv.threshold(blurred, 130, 255, cv.THRESH_BINARY_INV)
+    # kernel = np.ones((3, 3), np.uint8)
+    # closing = cv.morphologyEx(img_threshed, cv.MORPH_CLOSE, kernel)
+    # kernel = np.ones((3, 3), np.uint8)
+    # erosion = cv.erode(img_threshed, kernel, iterations=1)
 
-    return t1
-
+    return img_threshed
 
 def segment(img, clr):
     edged = cv.Canny(img, 30, 200)
     contours, hierarchy = cv.findContours(edged, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
     characters = {}
     segmented = {}
-    i, j = 0, 0
+    to_ex = []
+
     for cnt in contours:
         x, y, w, h = cv.boundingRect(cnt)
-        if 1.0 < h/w < 2.5 and h >= 100 and j == 0:
-            # cv.rectangle(clr, (x, y), (x + w, y + h), (0, 255, 0), 2)
-            cp =img.copy()
-            ch = cp[y:y+h, x:x+w]
-            characters[x] = ch
-            i += 1
-            j = 1
-        else:
-            j = 0
+        ex = False
+        if 0.4 < h/w < 4.0 and h >= 100:
+            for elem in to_ex:
+                if x <= elem <= (x+w):
+                    ex = True
+                    break
+            if not ex:
+                cp =img.copy()
+                ch = cp[y:y+h, x:x+w]
+                characters[x] = ch
+                to_ex.append(x+w/2)
+
         sort = sorted(characters)
 
+    print(len(characters))
+    cv.imshow('tst', img)
     for idx, key in enumerate(sort):
         segmented[idx] = characters[key]
         cv.imshow(str(idx), segmented[idx])
+
     return segmented
 
 
@@ -80,11 +106,12 @@ def segment(img, clr):
 def perform_processing(image: np.ndarray) -> str:
     print(f'image.shape: {image.shape}')
     # TODO: add image processing here
-    #contour_to_rect(image)
+    # contour_to_rect(image)
     plate = contour_to_rect(image)
-    cv.imshow('test', plate)
     threshed = thresh_chars(plate)
+    #cv.imshow('test', threshed)
     segmented = segment(threshed, plate)
+
 
 
 
