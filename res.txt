@@ -1,6 +1,6 @@
 {
+    "tab_00.jpg": "PO12345",
     "tab_001.jpg": "PO12345",
-    "tab_003.jpg": "PO12345",
     "tab_005.jpg": "PO12345",
     "tab_007.jpg": "PO12345",
     "tab_009.jpg": "PO12345",

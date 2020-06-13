@@ -1,6 +1,8 @@
 import numpy as np
 import cv2 as cv
 import imutils
+import os
+
 
 def contour_to_rect(image):
 
@@ -92,13 +94,38 @@ def segment(img, clr):
         sort = sorted(characters)
 
     print(len(characters))
-    cv.imshow('tst', img)
+    #cv.imshow('tst', img)
     for idx, key in enumerate(sort):
         segmented[idx] = characters[key]
-        cv.imshow(str(idx), segmented[idx])
+        #cv.imshow(str(idx), segmented[idx])
 
     return segmented
 
+def compare(detected, pattern):
+    contours, hierarchy = cv.findContours(detected, 2, 1)
+    cnt1 = contours[0]
+    contours, hierarchy = cv.findContours(pattern, 2, 1)
+    cnt2 = contours[0]
+    ret = cv.matchShapes(cnt1, cnt2, 1, 0.0)
+    return ret
+
+def perf_comparison(segmented):
+    recognition = []
+    for e in segmented:
+        elem = segmented[e]
+        val = {}
+        for filename in os.listdir('/home/michal/RiSA/SW/Number_plate_reading/symb'):
+            ind = filename.find('.')
+            name = str(filename[0:ind])
+            img = cv.imread(os.path.join('/home/michal/RiSA/SW/Number_plate_reading/symb', filename))
+            gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+            ret = compare(elem, gray)
+            val[ret] = name
+        srt_val = sorted(val)
+        vals = list(srt_val)
+        recognition.append(val[vals[0]])
+    print(recognition)
+    return recognition
 
 
 
@@ -106,11 +133,12 @@ def segment(img, clr):
 def perform_processing(image: np.ndarray) -> str:
     print(f'image.shape: {image.shape}')
     # TODO: add image processing here
-    # contour_to_rect(image)
+    contour_to_rect(image)
     plate = contour_to_rect(image)
     threshed = thresh_chars(plate)
     #cv.imshow('test', threshed)
     segmented = segment(threshed, plate)
+    recognition = perf_comparison(segmented)
 
 
 
