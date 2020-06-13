@@ -61,10 +61,10 @@ def thresh_chars(img):
     blurred = cv.bilateralFilter(gray, 101, 37, 37)
     #img_threshed = cv.adaptiveThreshold(blurred, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 11, 2)
     ret, img_threshed = cv.threshold(blurred, 130, 255, cv.THRESH_BINARY_INV)
-    # kernel = np.ones((3, 3), np.uint8)
-    # closing = cv.morphologyEx(img_threshed, cv.MORPH_CLOSE, kernel)
-    # kernel = np.ones((3, 3), np.uint8)
-    # erosion = cv.erode(img_threshed, kernel, iterations=1)
+    # kernel_er = np.ones((7, 7), np.uint8)
+    # erosion = cv.erode(img_threshed, kernel_er, iterations=1)
+    # kernel_op = np.ones((3, 3), np.uint8)
+    # opening = cv.morphologyEx(erosion, cv.MORPH_OPEN, kernel_op)
 
     return img_threshed
 
