@@ -2,6 +2,7 @@ import numpy as np
 import cv2 as cv
 import imutils
 import os
+from skimage import measure
 
 
 def contour_to_rect(image):
@@ -13,7 +14,7 @@ def contour_to_rect(image):
     blurred = cv.bilateralFilter(gray, 11, 27, 27)
     edged = cv.Canny(blurred, 30, 200)
     contours, hierarchy = cv.findContours(edged, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
-    cv.drawContours(img, contours, -1, (0, 255, 0), 3)
+    #cv.drawContours(img, contours, -1, (0, 255, 0), 3)
     cnts = imutils.grab_contours([contours, hierarchy])
     cnts = sorted(cnts, key=cv.contourArea, reverse=True)[:10]
     screenCnt = None
@@ -26,6 +27,18 @@ def contour_to_rect(image):
             screenCnt = approx
             break
     cv.drawContours(img, [screenCnt], 0, (0, 255, 0), 1)
+
+    #######################################################################################################################
+    # contours, hierarchy = cv.findContours(edged, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+    #
+    # for cnt in contours:
+    #     x, y, w, h = cv.boundingRect(cnt)
+    #     ex = False
+    #     if 4.0 < w / h < 6.0 and w >= 200:
+    #         p0, p1, p2, p3 = (x,y), (x+w, y), (x, y+h), (x+2, y+h)
+    #         print(p0, p1, p2, p3)
+    #         cv.imshow('ts', img)
+    ##############################################################################################
     p0, p2, p3, p1 = screenCnt[0][0], screenCnt[1][0], screenCnt[2][0], screenCnt[3][0]
     corn = []
     dict = {}
@@ -43,10 +56,10 @@ def contour_to_rect(image):
     p1 = corn[2]
     p2 = corn[1]
     p3 = corn[3]
-    p0 = [p0[0] - 5, p0[1] - 5]
-    p1 = [p1[0] + 5, p1[1] - 5]
-    p2 = [p2[0] - 5, p2[1] + 5]
-    p3 = [p3[0] + 5, p3[1] + 5]
+    # p0 = [p0[0] - 5, p0[1] - 5]
+    # p1 = [p1[0] + 5, p1[1] - 5]
+    # p2 = [p2[0] - 5, p2[1] + 5]
+    # p3 = [p3[0] + 5, p3[1] + 5]
 
     rect = np.array([p0, p1, p2, p3], np.float32)
     dst = np.array([[0, 0], [600, 0], [0, 150], [600, 150]], np.float32)
@@ -60,15 +73,16 @@ def contour_to_rect(image):
 
 def thresh_chars(img):
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-    blurred = cv.bilateralFilter(gray, 101, 37, 37)
-    #img_threshed = cv.adaptiveThreshold(blurred, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 11, 2)
-    ret, img_threshed = cv.threshold(blurred, 130, 255, cv.THRESH_BINARY_INV)
-    # kernel_er = np.ones((7, 7), np.uint8)
-    # erosion = cv.erode(img_threshed, kernel_er, iterations=1)
+    blurred = cv.bilateralFilter(gray, 101, 17, 17)
+    img_threshed = cv.adaptiveThreshold(blurred, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY_INV, 17, 1)
+    #ret, img_threshed = cv.threshold(blurred, 130, 255, cv.THRESH_BINARY_INV)
+    kernel_er = np.ones((3, 3), np.uint8)
+    erosion = cv.erode(img_threshed, kernel_er, iterations=1)
     # kernel_op = np.ones((3, 3), np.uint8)
     # opening = cv.morphologyEx(erosion, cv.MORPH_OPEN, kernel_op)
-
-    return img_threshed
+    # kernel_di = np.ones((3, 3), np.uint8)
+    # dilation = cv.dilate(opening, kernel_di, iterations=1)
+    return erosion
 
 def segment(img, clr):
     edged = cv.Canny(img, 30, 200)
@@ -94,26 +108,33 @@ def segment(img, clr):
         sort = sorted(characters)
 
     print(len(characters))
-    #cv.imshow('tst', img)
+    # cv.imshow('tst', img)
     for idx, key in enumerate(sort):
         segmented[idx] = characters[key]
-        #cv.imshow(str(idx), segmented[idx])
+        # cv.imshow(str(idx), segmented[idx])
 
     return segmented
 
 def compare(detected, pattern):
-    contours, hierarchy = cv.findContours(detected, 2, 1)
+    det = cv.resize(detected, (60, 120))
+    pat = cv.resize(pattern, (60, 120))
+    contours, hierarchy = cv.findContours(det, 2, 1)
     cnt1 = contours[0]
-    contours, hierarchy = cv.findContours(pattern, 2, 1)
+    contours, hierarchy = cv.findContours(pat, 2, 1)
     cnt2 = contours[0]
     ret = cv.matchShapes(cnt1, cnt2, 1, 0.0)
-    return ret
+    s = measure.compare_ssim(det, pat)
+    #return ret
+    return s
+
 
 def perf_comparison(segmented):
     recognition = []
+
     for e in segmented:
         elem = segmented[e]
         val = {}
+        imgs = {}
         for filename in os.listdir('/home/michal/RiSA/SW/Number_plate_reading/symb'):
             ind = filename.find('.')
             name = str(filename[0:ind])
@@ -121,13 +142,17 @@ def perf_comparison(segmented):
             gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
             ret = compare(elem, gray)
             val[ret] = name
+            imgs[ret] = gray
         srt_val = sorted(val)
         vals = list(srt_val)
-        recognition.append(val[vals[0]])
+        idx = len(vals)
+        recognition.append(val[vals[idx - 1]])
+        #pom = cv.imread(os.path.join('/home/michal/RiSA/SW/Number_plate_reading/symb', 'P.png'))
+        #pom2 = cv.cvtColor(pom, cv.COLOR_BGR2GRAY)
+        #print(compare(elem, pom2))
+        #cv.imshow('det_'+str(vals[0]), imgs[vals[0]])
     print(recognition)
     return recognition
-
-
 
 
 def perform_processing(image: np.ndarray) -> str:

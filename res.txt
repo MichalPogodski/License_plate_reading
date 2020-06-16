@@ -1,7 +1,6 @@
 {
     "tab_00.jpg": "PO12345",
     "tab_001.jpg": "PO12345",
-    "tab_005.jpg": "PO12345",
     "tab_007.jpg": "PO12345",
     "tab_009.jpg": "PO12345",
     "tab_014.jpg": "PO12345",
@@ -13,9 +12,10 @@
     "tab_025.jpg": "PO12345",
     "tab_027.jpg": "PO12345",
     "tab_028.jpg": "PO12345",
-    "tab_029.jpg": "PO12345",
     "tab_030.jpg": "PO12345",
     "tab_031.jpg": "PO12345",
     "tab_032.jpg": "PO12345",
-    "tab_033.jpg": "PO12345"
+    "tab_033.jpg": "PO12345",
+    "tab_044.jpg": "PO12345",
+    "tab_045.jpg": "PO12345"
 }
