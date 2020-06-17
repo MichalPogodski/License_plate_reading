@@ -15,13 +15,15 @@ def load_images_from_folder(folder):
 def preproc(img):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     blurred = cv2.bilateralFilter(gray, 101, 57, 57)
-    ret, img_threshed = cv2.threshold(blurred, 130, 255, cv2.THRESH_BINARY_INV)
+    ret, img_threshed = cv2.threshold(blurred, 100, 255, cv2.THRESH_BINARY_INV)
     #img_threshed = cv2.adaptiveThreshold(blurred, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 27, 1)
-    kernel_op = np.ones((5, 5), np.uint8)
-    opening = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel_op)
-    kernel_cl = np.ones((3, 3), np.uint8)
-    closing = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel_cl)
-    res = cv2.resize(img_threshed, (60, 120))
+    #kernel_op = np.ones((5, 5), np.uint8)
+    #opening = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel_op)
+    #kernel_cl = np.ones((3, 3), np.uint8)
+    #closing = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel_cl)
+    kernel_er = np.ones((3,3),np.uint8)
+    erosion = cv2.erode(img_threshed,kernel_er,iterations = 1)
+    res = cv2.resize(erosion, (60, 120))
 
     return res
 
