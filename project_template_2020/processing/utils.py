@@ -6,25 +6,27 @@ from skimage import measure
 
 detected, not_detected = 0, 0
 
-def contour_to_rect(image):
-
-    img = cv.resize(image, (620, 480))
+def find_plate(img):
     to_ret = img.copy()
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-    blurred = cv.bilateralFilter(gray, 11, 17, 17)
-    edged = cv.Canny(blurred, 30, 200)
-    contours, hierarchy = cv.findContours(edged, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+    #blurred = cv.GaussianBlur(gray, (17, 17), 0)
+    blurred = cv.bilateralFilter(gray, 11, 11, 11)
+    _, thresh = cv.threshold(blurred, 150, 255, cv.THRESH_BINARY_INV)
+    contours, _ = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
 
-    cnts = imutils.grab_contours([contours, hierarchy])
-    cnts = sorted(cnts, key=cv.contourArea, reverse=True)[:10]
+    hull = []
+    for cnt in contours: hull.append(cv.convexHull(cnt))
+    cnts = sorted(hull, key=cv.contourArea, reverse=True)
     screenCnt = None
 
-    for c in cnts:
-        peri = cv.arcLength(c, True)
-        approx = cv.approxPolyDP(c, 0.018 * peri, True)
+    for i in range(len(cnts)):
+        peri = cv.arcLength(cnts[i], True)
+        approx = cv.approxPolyDP(cnts[i], 0.018 * peri, True)
         if len(approx) == 4:
-            screenCnt = approx
-            break
+            x, y, w, h = cv.boundingRect(approx)
+            if 3.0 <= w/h <= 5.5 and w >= img.shape[0]/3:
+                screenCnt = approx
+                break
 
     p0, p2, p3, p1 = screenCnt[0][0], screenCnt[1][0], screenCnt[2][0], screenCnt[3][0]
     corn = []
@@ -42,10 +44,10 @@ def contour_to_rect(image):
     p1 = corn[2]
     p2 = corn[1]
     p3 = corn[3]
-    p0 = [p0[0] - 5, p0[1] - 5]
-    p1 = [p1[0] + 5, p1[1] - 5]
-    p2 = [p2[0] - 5, p2[1] + 5]
-    p3 = [p3[0] + 5, p3[1] + 5]
+    p0 = [p0[0] - 10, p0[1] - 10]
+    p1 = [p1[0] + 10, p1[1] - 10]
+    p2 = [p2[0] - 10, p2[1] + 10]
+    p3 = [p3[0] + 10, p3[1] + 10]
 
     rect = np.array([p0, p1, p2, p3], np.float32)
     dst = np.array([[0, 0], [600, 0], [0, 150], [600, 150]], np.float32)
@@ -53,7 +55,6 @@ def contour_to_rect(image):
     warped_clean = cv.warpPerspective(to_ret, M, (600, 150))
 
     return warped_clean
-
 
 
 def thresh_chars(img):
@@ -69,9 +70,10 @@ def thresh_chars(img):
     # dilation = cv.dilate(opening, kernel_di, iterations=1)
     return erosion
 
+
 def segment(img, clr):
-    edged = cv.Canny(img, 30, 200)
-    contours, hierarchy = cv.findContours(edged, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+    #edged = cv.Canny(img, 30, 200)
+    contours, hierarchy = cv.findContours(img, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
     characters = {}
     segmented = {}
     to_ex = []
@@ -93,12 +95,13 @@ def segment(img, clr):
         sort = sorted(characters)
 
     print(len(characters))
-    # cv.imshow('tst', img)
+    #cv.imshow('tst', img)
     for idx, key in enumerate(sort):
         segmented[idx] = characters[key]
-        # cv.imshow(str(idx), segmented[idx])
+        #cv.imshow(str(idx), segmented[idx])
 
     return segmented
+
 
 def compare(detected, pattern):
     det = cv.resize(detected, (60, 120))
@@ -109,6 +112,7 @@ def compare(detected, pattern):
 def perf_comparison(segmented):
     recognition = []
     banned = ['B', 'D', 'I', 'O', 'Z']
+    banned_on_start = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
     for e in segmented:
         elem = segmented[e]
         val = {}
@@ -125,11 +129,21 @@ def perf_comparison(segmented):
         vals = list(srt_val)
         idx = len(vals)
 
-        for b in banned:
-            symb = val[vals[idx - 1]]
-            if len(recognition) >= 3 and symb == b:
-                #print(len(recognition), symb)
-                idx -= 1
+        if len(recognition) < 2:
+            for i in range(len(banned_on_start)):
+                symb = val[vals[idx - 1]]
+                if symb == banned_on_start[i]:
+                    print(len(recognition), symb)
+                    idx -= 1
+                    i = 0
+        if len(recognition) >= 3:
+            for i in range(len(banned)):
+                symb = val[vals[idx - 1]]
+                if symb == banned[i]:
+                    print(len(recognition), symb)
+                    idx -= 1
+                    i = 0
+
 
         recognition.append(val[vals[idx - 1]])
     print(recognition)
@@ -141,20 +155,24 @@ def perform_processing(image: np.ndarray) -> str:
     # TODO: add image processing here
     global detected, not_detected
     try:
-        contour_to_rect(image)
+        plate = find_plate(image)
+        cv.imshow('plate', plate)
     except:
         recognition = '#######'
         print('license plate not detected')
         not_detected += 1
     else:
-        plate = contour_to_rect(image)
         threshed = thresh_chars(plate)
-        segmented = segment(threshed, plate)
-        recognition = perf_comparison(segmented)
-        detected +=1
+        try:
+            segmented = segment(threshed, plate)
+            recognition = perf_comparison(segmented)
+            detected += 1
+        except:
+            recognition = '#######'
+            print('license plate not detected')
+            not_detected += 1
 
     print('detected: ', detected, ' not detected: ', not_detected)
-
 
 
     cv.waitKey()
