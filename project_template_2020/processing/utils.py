@@ -4,12 +4,10 @@ import imutils
 import os
 from skimage import measure
 
-detected, not_detected = 0, 0
 
 def find_plate(img):
     to_ret = img.copy()
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-    #blurred = cv.GaussianBlur(gray, (17, 17), 0)
     blurred = cv.bilateralFilter(gray, 11, 11, 11)
     _, thresh = cv.threshold(blurred, 150, 255, cv.THRESH_BINARY_INV)
     contours, _ = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
@@ -40,14 +38,10 @@ def find_plate(img):
     for idx in range(4):
         corn.append(dict[srt_crn[idx]])
 
-    p0 = corn[0]
-    p1 = corn[2]
-    p2 = corn[1]
-    p3 = corn[3]
-    p0 = [p0[0] - 10, p0[1] - 10]
-    p1 = [p1[0] + 10, p1[1] - 10]
-    p2 = [p2[0] - 10, p2[1] + 10]
-    p3 = [p3[0] + 10, p3[1] + 10]
+    p0 = [corn[0][0], corn[0][1] - 10]
+    p1 = [corn[2][0], corn[2][1] - 10]
+    p2 = [corn[1][0], corn[1][1] + 10]
+    p3 = [corn[3][0], corn[3][1] + 10]
 
     rect = np.array([p0, p1, p2, p3], np.float32)
     dst = np.array([[0, 0], [600, 0], [0, 150], [600, 150]], np.float32)
@@ -61,18 +55,10 @@ def thresh_chars(img):
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     blurred = cv.bilateralFilter(gray, 101, 17, 17)
     img_threshed = cv.adaptiveThreshold(blurred, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY_INV, 17, 1)
-    #ret, img_threshed = cv.threshold(blurred, 130, 255, cv.THRESH_BINARY_INV)
-    kernel_er = np.ones((3, 3), np.uint8)
-    erosion = cv.erode(img_threshed, kernel_er, iterations=1)
-    # kernel_op = np.ones((3, 3), np.uint8)
-    # opening = cv.morphologyEx(erosion, cv.MORPH_OPEN, kernel_op)
-    # kernel_di = np.ones((3, 3), np.uint8)
-    # dilation = cv.dilate(opening, kernel_di, iterations=1)
-    return erosion
+    return img_threshed
 
 
 def segment(img, clr):
-    #edged = cv.Canny(img, 30, 200)
     contours, hierarchy = cv.findContours(img, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
     characters = {}
     segmented = {}
@@ -94,11 +80,8 @@ def segment(img, clr):
 
         sort = sorted(characters)
 
-    print(len(characters))
-    #cv.imshow('tst', img)
     for idx, key in enumerate(sort):
         segmented[idx] = characters[key]
-        #cv.imshow(str(idx), segmented[idx])
 
     return segmented
 
@@ -110,13 +93,12 @@ def compare(detected, pattern):
 
 
 def perf_comparison(segmented):
-    recognition = []
+    recognition = ""
     banned = ['B', 'D', 'I', 'O', 'Z']
     banned_on_start = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
     for e in segmented:
         elem = segmented[e]
         val = {}
-        imgs = {}
         for filename in os.listdir('/home/michal/RiSA/SW/Number_plate_reading/symb'):
             ind = filename.find('.')
             name = str(filename[0:ind])
@@ -124,7 +106,6 @@ def perf_comparison(segmented):
             gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
             ret = compare(elem, gray)
             val[ret] = name
-            imgs[ret] = gray
         srt_val = sorted(val)
         vals = list(srt_val)
         idx = len(vals)
@@ -133,48 +114,44 @@ def perf_comparison(segmented):
             for i in range(len(banned_on_start)):
                 symb = val[vals[idx - 1]]
                 if symb == banned_on_start[i]:
-                    print(len(recognition), symb)
                     idx -= 1
                     i = 0
         if len(recognition) >= 3:
             for i in range(len(banned)):
                 symb = val[vals[idx - 1]]
                 if symb == banned[i]:
-                    print(len(recognition), symb)
                     idx -= 1
                     i = 0
 
-
-        recognition.append(val[vals[idx - 1]])
-    print(recognition)
+        recognition += str(val[vals[idx - 1]])
     return recognition
 
 
 def perform_processing(image: np.ndarray) -> str:
     print(f'image.shape: {image.shape}')
     # TODO: add image processing here
-    global detected, not_detected
+
     try:
         plate = find_plate(image)
-        cv.imshow('plate', plate)
     except:
         recognition = '#######'
-        print('license plate not detected')
-        not_detected += 1
+
     else:
         threshed = thresh_chars(plate)
         try:
             segmented = segment(threshed, plate)
             recognition = perf_comparison(segmented)
-            detected += 1
         except:
-            recognition = '#######'
-            print('license plate not detected')
-            not_detected += 1
+            recognition = '@@@@@@@'
 
-    print('detected: ', detected, ' not detected: ', not_detected)
+    if len(recognition) < 7:
+        for i in range (7 - len(recognition)):
+            recognition += '#'
+    elif len(recognition) > 7:
+        rec = recognition.copy()
+        recognition = rec[(len(rec)-7):]
 
-
+    print('recognition ', recognition)
     cv.waitKey()
 
-    return 'PO12345'
+    return recognition
