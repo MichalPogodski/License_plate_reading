@@ -1,6 +1,5 @@
 import numpy as np
 import cv2 as cv
-import imutils
 import os
 from skimage import measure
 
@@ -8,25 +7,27 @@ from skimage import measure
 def find_plate(img):
     to_ret = img.copy()
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-    blurred = cv.bilateralFilter(gray, 11, 11, 11)
-    _, thresh = cv.threshold(blurred, 150, 255, cv.THRESH_BINARY_INV)
+    blurred_pre = cv.GaussianBlur(gray, (27, 27), 1)
+    blurred = cv.bilateralFilter(blurred_pre, 13, 17, 17)
+    _, thresh = cv.threshold(blurred, 145, 255, cv.THRESH_BINARY_INV)
     contours, _ = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
-
+    pom = cv.resize(thresh, (600, 450))
+    cv.imshow('preproc', pom)
     hull = []
     for cnt in contours: hull.append(cv.convexHull(cnt))
     cnts = sorted(hull, key=cv.contourArea, reverse=True)
-    screenCnt = None
+    box = None
 
     for i in range(len(cnts)):
-        peri = cv.arcLength(cnts[i], True)
-        approx = cv.approxPolyDP(cnts[i], 0.018 * peri, True)
-        if len(approx) == 4:
-            x, y, w, h = cv.boundingRect(approx)
-            if 3.0 <= w/h <= 5.5 and w >= img.shape[0]/3:
-                screenCnt = approx
+        epsilon = 0.02 * cv.arcLength(cnts[i], True)
+        apprx = cv.approxPolyDP(cnts[i], epsilon, True)
+        if len(apprx) == 4:
+            x, y, w, h = cv.boundingRect(apprx)
+            if 2.0 <= w/h <= 5.75 and w >= img.shape[0]/3:
+                box = apprx
                 break
 
-    p0, p2, p3, p1 = screenCnt[0][0], screenCnt[1][0], screenCnt[2][0], screenCnt[3][0]
+    p0, p2, p3, p1 = box[0][0], box[1][0], box[2][0], box[3][0]
     corn = []
     dict = {}
     dict[sum(p0)] = p0
@@ -53,12 +54,14 @@ def find_plate(img):
 
 def thresh_chars(img):
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-    blurred = cv.bilateralFilter(gray, 101, 17, 17)
-    img_threshed = cv.adaptiveThreshold(blurred, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY_INV, 17, 1)
-    return img_threshed
+    blurred_pre = cv.GaussianBlur(gray, (27, 27), 1)
+    blurred = cv.bilateralFilter(blurred_pre, 11, 17, 17)
+    _, thresh = cv.threshold(blurred, 150, 255, cv.THRESH_BINARY_INV)
+    #thresh = cv.adaptiveThreshold(blurred, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY_INV, 17, 1)
+    return thresh
 
 
-def segment(img, clr):
+def segment(img):
     contours, hierarchy = cv.findContours(img, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
     characters = {}
     segmented = {}
@@ -67,15 +70,14 @@ def segment(img, clr):
     for cnt in contours:
         x, y, w, h = cv.boundingRect(cnt)
         ex = False
-        if 0.4 < h/w < 4.0 and h >= 100:
+        if 0.4 < h/w < 4.0 and h >= 50:
             for elem in to_ex:
                 if x <= elem <= (x+w):
                     ex = True
                     break
             if not ex:
                 cp =img.copy()
-                ch = cp[y:y+h, x:x+w]
-                characters[x] = ch
+                characters[x] = cp[y:y+h, x:x+w]
                 to_ex.append(x+w/2)
 
         sort = sorted(characters)
@@ -99,10 +101,10 @@ def perf_comparison(segmented):
     for e in segmented:
         elem = segmented[e]
         val = {}
-        for filename in os.listdir('/home/michal/RiSA/SW/Number_plate_reading/symb'):
+        for filename in os.listdir('symb'):
             ind = filename.find('.')
             name = str(filename[0:ind])
-            img = cv.imread(os.path.join('/home/michal/RiSA/SW/Number_plate_reading/symb', filename))
+            img = cv.imread(os.path.join('symb', filename))
             gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
             ret = compare(elem, gray)
             val[ret] = name
@@ -138,17 +140,18 @@ def perform_processing(image: np.ndarray) -> str:
 
     else:
         threshed = thresh_chars(plate)
+        cv.imshow('preproc: ', threshed)
         try:
-            segmented = segment(threshed, plate)
+            segmented = segment(threshed)
             recognition = perf_comparison(segmented)
         except:
-            recognition = '@@@@@@@'
+            recognition = '#######'
 
     if len(recognition) < 7:
-        for i in range (7 - len(recognition)):
+        for i in range(7 - len(recognition)):
             recognition += '#'
     elif len(recognition) > 7:
-        rec = recognition.copy()
+        rec = recognition
         recognition = rec[(len(rec)-7):]
 
     print('recognition ', recognition)
