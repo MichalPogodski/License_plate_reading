@@ -5,14 +5,20 @@ from skimage import measure
 
 
 def find_plate(img):
+    x_size, y_size, ch = img.shape
+    a = int(x_size/110)
+    if a % 2 == 0: a += 1
+    b = int(x_size/176)
+    if b % 2 == 0: b += 1
+    c = int(x_size/230)
+    if c % 2 == 0: c += 1
+
     to_ret = img.copy()
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-    blurred_pre = cv.GaussianBlur(gray, (27, 27), 1)
-    blurred = cv.bilateralFilter(blurred_pre, 13, 17, 17)
+    blurred_pre = cv.GaussianBlur(gray, (a, a), 1)
+    blurred = cv.bilateralFilter(blurred_pre, c, b, b)
     _, thresh = cv.threshold(blurred, 145, 255, cv.THRESH_BINARY_INV)
     contours, _ = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
-    pom = cv.resize(thresh, (600, 450))
-    cv.imshow('preproc', pom)
     hull = []
     for cnt in contours: hull.append(cv.convexHull(cnt))
     cnts = sorted(hull, key=cv.contourArea, reverse=True)
@@ -39,10 +45,10 @@ def find_plate(img):
     for idx in range(4):
         corn.append(dict[srt_crn[idx]])
 
-    p0 = [corn[0][0], corn[0][1] - 10]
-    p1 = [corn[2][0], corn[2][1] - 10]
-    p2 = [corn[1][0], corn[1][1] + 10]
-    p3 = [corn[3][0], corn[3][1] + 10]
+    p0 = [corn[0][0], corn[0][1] - 15]
+    p1 = [corn[2][0], corn[2][1] - 15]
+    p2 = [corn[1][0], corn[1][1] + 15]
+    p3 = [corn[3][0], corn[3][1] + 15]
 
     rect = np.array([p0, p1, p2, p3], np.float32)
     dst = np.array([[0, 0], [600, 0], [0, 150], [600, 150]], np.float32)
@@ -54,11 +60,12 @@ def find_plate(img):
 
 def thresh_chars(img):
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-    blurred_pre = cv.GaussianBlur(gray, (27, 27), 1)
-    blurred = cv.bilateralFilter(blurred_pre, 11, 17, 17)
-    _, thresh = cv.threshold(blurred, 150, 255, cv.THRESH_BINARY_INV)
-    #thresh = cv.adaptiveThreshold(blurred, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY_INV, 17, 1)
-    return thresh
+    _, thresh = cv.threshold(gray, 100, 255, cv.THRESH_BINARY_INV)
+    kernel_di = np.ones((3, 3), np.uint8)
+    dilation = cv.dilate(thresh, kernel_di, iterations=1)
+
+    return dilation
+
 
 
 def segment(img):
@@ -101,10 +108,10 @@ def perf_comparison(segmented):
     for e in segmented:
         elem = segmented[e]
         val = {}
-        for filename in os.listdir('symb'):
+        for filename in os.listdir('processing/symb'):
             ind = filename.find('.')
             name = str(filename[0:ind])
-            img = cv.imread(os.path.join('symb', filename))
+            img = cv.imread(os.path.join('processing/symb', filename))
             gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
             ret = compare(elem, gray)
             val[ret] = name
@@ -140,7 +147,6 @@ def perform_processing(image: np.ndarray) -> str:
 
     else:
         threshed = thresh_chars(plate)
-        cv.imshow('preproc: ', threshed)
         try:
             segmented = segment(threshed)
             recognition = perf_comparison(segmented)
