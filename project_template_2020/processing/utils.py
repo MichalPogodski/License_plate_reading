@@ -69,7 +69,7 @@ def thresh_chars(img):
 
 
 def segment(img):
-    contours, hierarchy = cv.findContours(img, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+    contours, _ = cv.findContours(img, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
     characters = {}
     segmented = {}
     to_ex = []
@@ -160,7 +160,7 @@ def perform_processing(image: np.ndarray) -> str:
         rec = recognition
         recognition = rec[(len(rec)-7):]
 
-    print('recognition ', recognition)
+    #print('recognition ', recognition)
     cv.waitKey()
 
     return recognition

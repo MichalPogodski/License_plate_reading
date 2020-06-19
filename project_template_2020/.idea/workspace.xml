@@ -2,113 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="095db28c-39d9-431b-990d-c5c0e8b7bd37" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../char/0.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/6.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/7.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/8.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/9.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/A.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/B.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/C.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/D.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/E.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/F.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/G.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/H.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/I.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/J.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/K.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/L.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/M.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/N.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/O.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/P.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/R.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/S.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/T.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/U.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/W.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/X.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/Y.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../char/Z.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Nazwisko_Imie.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/processing/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/processing/utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/0.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/6.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/7.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/8.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/9.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/A.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/B.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/C.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/D.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/E.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/F.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/G.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/H.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/I.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/J.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/K.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/L.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/M.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/N.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/O.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/P.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/R.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/S.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/T.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/U.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/W.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/X.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/Y.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symb/Z.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../recogPreproc.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../res.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../res.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/0.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/6.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/7.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/8.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/9.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/A.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/B.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/C.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/D.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/E.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/F.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/G.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/H.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/I.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/J.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/K.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/L.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/M.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/N.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/O.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/P.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/R.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/S.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/T.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/U.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/W.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/X.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/Y.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../symb/Z.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -197,7 +92,7 @@
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
     <state x="2629" y="310" width="424" height="484" key="FileChooserDialogImpl/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1591020103845" />
-    <state width="1830" height="300" key="GridCell.Tab.0.bottom" timestamp="1592551918730">
+    <state width="1830" height="300" key="GridCell.Tab.0.bottom" timestamp="1592552833833">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
     <state width="1830" height="453" key="GridCell.Tab.0.bottom/0.27.1853.1053/0.27.1853.1053@0.27.1853.1053" timestamp="1592328700697" />
@@ -205,8 +100,8 @@
     <state width="1830" height="210" key="GridCell.Tab.0.bottom/0.27.1920.1053/0.27.1920.1053@0.27.1920.1053" timestamp="1592391957803" />
     <state width="1830" height="344" key="GridCell.Tab.0.bottom/0.27.3773.1053@0.27.3773.1053" timestamp="1592514560305" />
     <state width="1830" height="344" key="GridCell.Tab.0.bottom/1920.0.1920.1080/0.27.1853.1053@0.27.1853.1053" timestamp="1592425689222" />
-    <state width="1830" height="300" key="GridCell.Tab.0.bottom/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1592551918730" />
-    <state width="1830" height="300" key="GridCell.Tab.0.center" timestamp="1592551918730">
+    <state width="1830" height="300" key="GridCell.Tab.0.bottom/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1592552833833" />
+    <state width="1830" height="300" key="GridCell.Tab.0.center" timestamp="1592552833833">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
     <state width="1830" height="453" key="GridCell.Tab.0.center/0.27.1853.1053/0.27.1853.1053@0.27.1853.1053" timestamp="1592328700697" />
@@ -214,8 +109,8 @@
     <state width="1830" height="210" key="GridCell.Tab.0.center/0.27.1920.1053/0.27.1920.1053@0.27.1920.1053" timestamp="1592391957802" />
     <state width="1830" height="344" key="GridCell.Tab.0.center/0.27.3773.1053@0.27.3773.1053" timestamp="1592514560305" />
     <state width="1830" height="344" key="GridCell.Tab.0.center/1920.0.1920.1080/0.27.1853.1053@0.27.1853.1053" timestamp="1592425689222" />
-    <state width="1830" height="300" key="GridCell.Tab.0.center/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1592551918730" />
-    <state width="1830" height="300" key="GridCell.Tab.0.left" timestamp="1592551918730">
+    <state width="1830" height="300" key="GridCell.Tab.0.center/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1592552833833" />
+    <state width="1830" height="300" key="GridCell.Tab.0.left" timestamp="1592552833832">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
     <state width="1830" height="453" key="GridCell.Tab.0.left/0.27.1853.1053/0.27.1853.1053@0.27.1853.1053" timestamp="1592328700697" />
@@ -223,8 +118,8 @@
     <state width="1830" height="210" key="GridCell.Tab.0.left/0.27.1920.1053/0.27.1920.1053@0.27.1920.1053" timestamp="1592391957802" />
     <state width="1830" height="344" key="GridCell.Tab.0.left/0.27.3773.1053@0.27.3773.1053" timestamp="1592514560305" />
     <state width="1830" height="344" key="GridCell.Tab.0.left/1920.0.1920.1080/0.27.1853.1053@0.27.1853.1053" timestamp="1592425689222" />
-    <state width="1830" height="300" key="GridCell.Tab.0.left/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1592551918730" />
-    <state width="1830" height="300" key="GridCell.Tab.0.right" timestamp="1592551918730">
+    <state width="1830" height="300" key="GridCell.Tab.0.left/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1592552833832" />
+    <state width="1830" height="300" key="GridCell.Tab.0.right" timestamp="1592552833833">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
     <state width="1830" height="453" key="GridCell.Tab.0.right/0.27.1853.1053/0.27.1853.1053@0.27.1853.1053" timestamp="1592328700697" />
@@ -232,7 +127,7 @@
     <state width="1830" height="210" key="GridCell.Tab.0.right/0.27.1920.1053/0.27.1920.1053@0.27.1920.1053" timestamp="1592391957802" />
     <state width="1830" height="344" key="GridCell.Tab.0.right/0.27.3773.1053@0.27.3773.1053" timestamp="1592514560305" />
     <state width="1830" height="344" key="GridCell.Tab.0.right/1920.0.1920.1080/0.27.1853.1053@0.27.1853.1053" timestamp="1592425689222" />
-    <state width="1830" height="300" key="GridCell.Tab.0.right/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1592551918730" />
+    <state width="1830" height="300" key="GridCell.Tab.0.right/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1592552833833" />
     <state width="1830" height="344" key="GridCell.Tab.1.bottom" timestamp="1592514560306">
       <screen x="0" y="27" width="3773" height="1053" />
     </state>
