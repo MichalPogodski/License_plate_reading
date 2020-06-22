@@ -9,8 +9,8 @@ def find_plate(img):
 
     to_ret = img.copy()
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-    blurred = cv.medianBlur(gray, 3)
-    _, thresh = cv.threshold(blurred, 145, 255, cv.THRESH_BINARY_INV)
+    # blurred = cv.medianBlur(gray, 1)
+    _, thresh = cv.threshold(gray, 140, 255, cv.THRESH_BINARY_INV)
     contours, _ = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
     hull = []
     for cnt in contours: hull.append(cv.convexHull(cnt))
@@ -18,7 +18,7 @@ def find_plate(img):
     box = None
 
     for i in range(len(cnts)):
-        epsilon = 0.03 * cv.arcLength(cnts[i], True)
+        epsilon = 0.02 * cv.arcLength(cnts[i], True)
         apprx = cv.approxPolyDP(cnts[i], epsilon, True)
         if len(apprx) == 4:
             x, y, w, h = cv.boundingRect(apprx)
@@ -38,10 +38,10 @@ def find_plate(img):
     for idx in range(4):
         corn.append(dict[srt_crn[idx]])
 
-    p0 = [corn[0][0], corn[0][1] - 15]
-    p1 = [corn[2][0], corn[2][1] - 15]
-    p2 = [corn[1][0], corn[1][1] + 15]
-    p3 = [corn[3][0], corn[3][1] + 15]
+    p0 = [corn[0][0], corn[0][1] - 20]
+    p1 = [corn[2][0], corn[2][1] - 20]
+    p2 = [corn[1][0], corn[1][1] + 20]
+    p3 = [corn[3][0], corn[3][1] + 20]
 
     rect = np.array([p0, p1, p2, p3], np.float32)
     dst = np.array([[0, 0], [600, 0], [0, 150], [600, 150]], np.float32)
@@ -54,8 +54,8 @@ def find_plate(img):
 def adaptive_find_plate(img):
     to_ret = img.copy()
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-    blurred = cv.medianBlur(gray, 9)
-    thresh = cv.adaptiveThreshold(blurred, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY_INV, 21, 2)
+    blurred = cv.medianBlur(gray, 7)
+    thresh = cv.adaptiveThreshold(blurred, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY_INV, 11, 2)
     contours, _ = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
     hull = []
     for cnt in contours: hull.append(cv.convexHull(cnt))
@@ -63,7 +63,7 @@ def adaptive_find_plate(img):
     box = None
 
     for i in range(len(cnts)):
-        epsilon = 0.03 * cv.arcLength(cnts[i], True)
+        epsilon = 0.02 * cv.arcLength(cnts[i], True)
         apprx = cv.approxPolyDP(cnts[i], epsilon, True)
         if len(apprx) == 4:
             x, y, w, h = cv.boundingRect(apprx)
@@ -83,10 +83,10 @@ def adaptive_find_plate(img):
     for idx in range(4):
         corn.append(dict[srt_crn[idx]])
 
-    p0 = [corn[0][0], corn[0][1] - 15]
-    p1 = [corn[2][0], corn[2][1] - 15]
-    p2 = [corn[1][0], corn[1][1] + 15]
-    p3 = [corn[3][0], corn[3][1] + 15]
+    p0 = [corn[0][0], corn[0][1]]
+    p1 = [corn[2][0], corn[2][1]]
+    p2 = [corn[1][0], corn[1][1]]
+    p3 = [corn[3][0], corn[3][1]]
 
     rect = np.array([p0, p1, p2, p3], np.float32)
     dst = np.array([[0, 0], [600, 0], [0, 150], [600, 150]], np.float32)
@@ -98,15 +98,16 @@ def adaptive_find_plate(img):
 
 def thresh_chars(img):
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-    _, thresh = cv.threshold(gray, 100, 255, cv.THRESH_BINARY_INV)
-    kernel_di = np.ones((3, 3), np.uint8)
-    dilation = cv.dilate(thresh, kernel_di, iterations=1)
+    _, thresh = cv.threshold(gray, 90, 255, cv.THRESH_BINARY_INV)
+    # thresh = cv.adaptiveThreshold(gray, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY_INV, 17, 1)
+    kernel_er = np.ones((3, 3), np.uint8)
+    erode = cv.erode(thresh, kernel_er, iterations=1)
 
-    return dilation
+    return erode
 
 
 
-def segment(img):
+def segment(img, clean):
     contours, _ = cv.findContours(img, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
     characters = {}
     segmented = {}
@@ -115,20 +116,36 @@ def segment(img):
     for cnt in contours:
         x, y, w, h = cv.boundingRect(cnt)
         ex = False
-        if 0.4 < h/w < 4.0 and h >= 50:
+        if 0.6 < h/w < 4.0 and h >= 70:
             for elem in to_ex:
                 if x <= elem <= (x+w):
                     ex = True
                     break
             if not ex:
-                cp =img.copy()
-                characters[x] = cp[y:y+h, x:x+w]
+                cp =clean.copy()
+                charact = cp[(y - 5):y + (h+10), (x-5):x + (w+10)]
+                gray = cv.cvtColor(charact, cv.COLOR_BGR2GRAY)
+                # blurred = cv.medianBlur(gray, 1)
+                _, thresh = cv.threshold(gray, 100, 255, cv.THRESH_BINARY_INV)
+
+
+                kernel_er = np.ones((5, 5), np.uint8)
+                erode = cv.erode(thresh, kernel_er, iterations=1)
+                kernel_op = np.ones((3, 3), np.uint8)
+                opening = cv.morphologyEx(erode, cv.MORPH_OPEN, kernel_op)
+                kernel_di = np.ones((5, 5), np.uint8)
+                dilate = cv.dilate(opening, kernel_di, iterations=1)
+                kernel_cl = np.ones((3, 3), np.uint8)
+                closing = cv.morphologyEx(dilate, cv.MORPH_CLOSE, kernel_cl)
+
+                characters[x] = closing
                 to_ex.append(x+w/2)
 
         sort = sorted(characters)
 
     for idx, key in enumerate(sort):
         segmented[idx] = characters[key]
+        # cv.imshow(str(idx), segmented[idx])
 
     return segmented
 
@@ -179,38 +196,21 @@ def perform_processing(image: np.ndarray) -> str:
     # TODO: add image processing here
     global not_det
 
+
     try:
         plate = find_plate(image)
     except:
-
-        try:
-            plate = adaptive_find_plate(image)
-        except:
-            recognition = '???????'
-            not_det += 1
-        else:
-            threshed = thresh_chars(plate)
-            cv.imshow('detected plate_ADAPT******', threshed)
-
-            try:
-                segmented = segment(threshed)
-                recognition = perf_comparison(segmented)
-            except:
-                recognition = '???????'
-
+        recognition = '???????'
     else:
         threshed = thresh_chars(plate)
-        cv.imshow('detected plate', threshed)
-
+        # cv.imshow('detected plate', threshed)
         try:
-            segmented = segment(threshed)
+            segmented = segment(threshed, plate)
             recognition = perf_comparison(segmented)
         except:
             recognition = '???????'
 
-
-
-    if len(recognition) != 7:
+    if len(recognition) != 7 or recognition == '???????':
         try:
             plate = adaptive_find_plate(image)
         except:
@@ -219,18 +219,21 @@ def perform_processing(image: np.ndarray) -> str:
 
         else:
             threshed = thresh_chars(plate)
-            cv.imshow('detected plate_ADAPT******', threshed)
+            # cv.imshow('detected plate_ADAPT******', threshed)
             try:
-                segmented = segment(threshed)
+                segmented = segment(threshed, plate)
                 recognition = perf_comparison(segmented)
             except:
                 recognition = '???????'
+                not_det += 1
 
 
     if len(recognition) < 7:
+        not_det += 1
         for i in range(7 - len(recognition)):
             recognition += '?'
     elif len(recognition) > 7:
+        not_det += 1
         rec = recognition
         recognition = rec[(len(rec)-7):]
 
