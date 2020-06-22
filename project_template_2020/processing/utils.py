@@ -9,8 +9,9 @@ def find_plate(img):
 
     to_ret = img.copy()
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-    # blurred = cv.medianBlur(gray, 1)
-    _, thresh = cv.threshold(gray, 140, 255, cv.THRESH_BINARY_INV)
+    # blur = cv.GaussianBlur(gray, (5, 5), 0)
+    blur2 = cv.bilateralFilter(gray, 3, 3, 1)
+    _, thresh = cv.threshold(blur2, 140, 255, cv.THRESH_BINARY_INV)
     contours, _ = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
     hull = []
     for cnt in contours: hull.append(cv.convexHull(cnt))
@@ -18,11 +19,11 @@ def find_plate(img):
     box = None
 
     for i in range(len(cnts)):
-        epsilon = 0.02 * cv.arcLength(cnts[i], True)
+        epsilon = 0.06 * cv.arcLength(cnts[i], True)
         apprx = cv.approxPolyDP(cnts[i], epsilon, True)
         if len(apprx) == 4:
             x, y, w, h = cv.boundingRect(apprx)
-            if 2.5 <= w/h <= 7.5 and w >= img.shape[0]/3 and w < img.shape[0]:
+            if 2.0 <= w/h <= 7.5 and w >= img.shape[0]/3 and w < img.shape[0]:
                 box = apprx
                 break
 
@@ -54,8 +55,8 @@ def find_plate(img):
 def adaptive_find_plate(img):
     to_ret = img.copy()
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-    blurred = cv.medianBlur(gray, 7)
-    thresh = cv.adaptiveThreshold(blurred, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY_INV, 11, 2)
+    blur = cv.GaussianBlur(gray, (5, 5), 0)
+    thresh = cv.adaptiveThreshold(blur, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY_INV, 11, 2)
     contours, _ = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
     hull = []
     for cnt in contours: hull.append(cv.convexHull(cnt))
@@ -63,11 +64,11 @@ def adaptive_find_plate(img):
     box = None
 
     for i in range(len(cnts)):
-        epsilon = 0.02 * cv.arcLength(cnts[i], True)
+        epsilon = 0.06 * cv.arcLength(cnts[i], True)
         apprx = cv.approxPolyDP(cnts[i], epsilon, True)
         if len(apprx) == 4:
             x, y, w, h = cv.boundingRect(apprx)
-            if 2.5 <= w / h <= 7.5 and w >= img.shape[0] / 3 and w < img.shape[0]:
+            if 2.0 <= w / h <= 7.5 and w >= img.shape[0] / 3 and w < img.shape[0]:
                 box = apprx
                 break
 
@@ -99,7 +100,6 @@ def adaptive_find_plate(img):
 def thresh_chars(img):
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     _, thresh = cv.threshold(gray, 90, 255, cv.THRESH_BINARY_INV)
-    # thresh = cv.adaptiveThreshold(gray, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY_INV, 17, 1)
     kernel_er = np.ones((3, 3), np.uint8)
     erode = cv.erode(thresh, kernel_er, iterations=1)
 
@@ -125,20 +125,12 @@ def segment(img, clean):
                 cp =clean.copy()
                 charact = cp[(y - 5):y + (h+10), (x-5):x + (w+10)]
                 gray = cv.cvtColor(charact, cv.COLOR_BGR2GRAY)
-                # blurred = cv.medianBlur(gray, 1)
-                _, thresh = cv.threshold(gray, 100, 255, cv.THRESH_BINARY_INV)
+                _, thresh = cv.threshold(gray, 120, 255, cv.THRESH_BINARY_INV)
 
-
-                kernel_er = np.ones((5, 5), np.uint8)
-                erode = cv.erode(thresh, kernel_er, iterations=1)
                 kernel_op = np.ones((3, 3), np.uint8)
-                opening = cv.morphologyEx(erode, cv.MORPH_OPEN, kernel_op)
-                kernel_di = np.ones((5, 5), np.uint8)
-                dilate = cv.dilate(opening, kernel_di, iterations=1)
-                kernel_cl = np.ones((3, 3), np.uint8)
-                closing = cv.morphologyEx(dilate, cv.MORPH_CLOSE, kernel_cl)
+                close = cv.morphologyEx(thresh, cv.MORPH_CLOSE, kernel_op)
 
-                characters[x] = closing
+                characters[x] = close
                 to_ex.append(x+w/2)
 
         sort = sorted(characters)
@@ -239,6 +231,6 @@ def perform_processing(image: np.ndarray) -> str:
 
     print('recognition ', recognition)
     cv.waitKey()
-    print('not detected: ', not_det)
+    # print('not detected: ', not_det)
 
     return recognition
