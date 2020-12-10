@@ -4,7 +4,7 @@ Image processing functionality implemented in project_template_2020/processing/u
 1. Extracting license plate on image.
 2. Filtering image. 
 3. Extracting characters.
-4. Recognizing characters by compring with template.
+4. Recognizing characters by comparing with template.
 
 ## Goals:
 * Find license plate on an image. 
