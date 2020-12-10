@@ -1,5 +1,10 @@
 # License_plate_reading
 
+Image processing functionality implemented in project_template_2020/processing/utils.py
+1. Extracting license plate on image.
+2. Filtering image. 
+3. Extracting characters.
+4. Recognizing characters by compring with template.
 
 ## Goals:
 * Find license plate on an image. 
